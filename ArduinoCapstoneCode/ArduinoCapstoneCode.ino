@@ -1,5 +1,5 @@
 /*
-
+PM1.PM2.5,PM10,VisibleLight,IR,UV,CO2,TEMP,HUMIDITY
 */
 
 #include <Seeed_HM330X.h> //PMOD 2.5 Air quality lib
@@ -51,36 +51,33 @@ void loop() {
   if (pm_Sensor.read_sensor_value(buf, 29)) {
     Serial.println("HM330X read result failed!!!");
   }
-  parse_result_value(buf);
+ //parse_result_value(buf);
   parse_result(buf);
-  Serial.println("");
-  delay(3000);
-
-  Serial.print("//--------------------------------------//\r\n");
-  Serial.print("Vis: "); Serial.println(SI1145.ReadVisible());
-  Serial.print("IR: "); Serial.println(SI1145.ReadIR());
+  Serial.print(SI1145.ReadVisible());
+  Serial.print(",");
+  Serial.print(SI1145.ReadIR());
+  Serial.print(",");
   //the real UV value must be div 100 from the reg value , datasheet for more information.
-  Serial.print("UV: ");  Serial.println((float)SI1145.ReadUV() / 100);
-  delay(3000);
-
+  Serial.print((float)SI1145.ReadUV() / 100);
+  Serial.print(",");
+  
   float result[3] = {0};
   if (scd30.isAvailable()) {
     scd30.getCarbonDioxideConcentration(result);
-    Serial.print("Carbon Dioxide Concentration is: ");
+    //Serial.print("Carbon Dioxide Concentration is: ");
     Serial.print(result[0]);
-    Serial.println(" ppm");
-    Serial.println(" ");
-    Serial.print("Temperature = ");
+    Serial.print(" ppm");
+    Serial.print(",");
+    //Serial.print("Temperature = ");
     Serial.print(result[1]);
-    Serial.println(" ℃");
-    Serial.println(" ");
-    Serial.print("Humidity = ");
+    Serial.print(" ℃");
+    Serial.print(",");
+    //Serial.print("Humidity = ");
     Serial.print(result[2]);
-    Serial.println(" %");
-    Serial.println(" ");
-    Serial.println(" ");
-    Serial.println(" ");
+    Serial.print("%");
+    Serial.println();
   }
-  delay(3000);
-
+  delay(30000);
+  Serial.flush();
+  
 }
